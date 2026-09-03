@@ -1,0 +1,306 @@
+[
+  {
+    "id": "mega-fm-92-7",
+    "name": "ميجا أف أم",
+    "desc": "92.7 FM - إذاعة مصرية بث مباشر",
+    "freq": "92.7 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/mega-fm-92-7.png",
+    "stream": "http://megafm927.radioca.st/listen.pls?sid=1"
+  },
+  {
+    "id": "arab-mix-fm",
+    "name": "Arab Mix FM",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/arab-mix-fm.png",
+    "stream": "https://stream.zeno.fm/efx5psd00qruv.m3u"
+  },
+  {
+    "id": "9090",
+    "name": "راديو 9090",
+    "desc": "90.9 FM - إذاعة مصرية بث مباشر",
+    "freq": "90.9 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/9090.png",
+    "stream": "https://9090streaming.mobtada.com/9090FMEGYPT"
+  },
+  {
+    "id": "nogoum-fm",
+    "name": "نجوم أف أم",
+    "desc": "100.6 FM - إذاعة مصرية بث مباشر",
+    "freq": "100.6 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png",
+    "stream": "https://www.nogoumfm.net/live-radio-stream/"
+  },
+  {
+    "id": "nile-fm",
+    "name": "Nile FM",
+    "desc": "104.2 FM - إذاعة مصرية بث مباشر",
+    "freq": "104.2 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png",
+    "stream": "https://audio.nrpstream.com/listen/nile_fm/radio.mp3"
+  },
+  {
+    "id": "hits",
+    "name": "راديو هيتس",
+    "desc": "88.2 FM - إذاعة مصرية بث مباشر",
+    "freq": "88.2 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/hits.png",
+    "stream": "http://radiohits882.radioca.st/listen.pls?sid=1"
+  },
+  {
+    "id": "el-gouna",
+    "name": "إذاعة الجونة استمع",
+    "desc": "100.0 FM - إذاعة مصرية بث مباشر",
+    "freq": "100.0 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/el-gouna.png",
+    "stream": "http://82.201.132.237:8000/listen.pls"
+  },
+  {
+    "id": "moga",
+    "name": "راديو موجة",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/moga.png",
+    "stream": "http://radio.hhost.host:8040/listen.pls?sid=1"
+  },
+  {
+    "id": "banha",
+    "name": "راديو بنها سيتي",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/banha.png",
+    "stream": "http://whsh4u-panel.com:14113/listen.pls?sid=1"
+  },
+  {
+    "id": "egonair",
+    "name": "راديو مصر على الهوا",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/egonair.png",
+    "stream": "https://radio.socialgenix.com/8004/stream"
+  },
+  {
+    "id": "copt4g-akbat-el3alam",
+    "name": "إذاعة أقباط العام",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/copt4g-akbat-el3alam.png",
+    "stream": "http://usa18.fastcast4u.com:5828/listen.pls?sid=1"
+  },
+  {
+    "id": "sotak",
+    "name": "راديو صوتك",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/sotak.png",
+    "stream": "https://radio.radiosotak.com/sotak_mp3"
+  },
+  {
+    "id": "tiba",
+    "name": "إذاعة تيبة",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/tiba.png",
+    "stream": "http://s1.voscast.com:10026/stream.m3u"
+  },
+  {
+    "id": "next",
+    "name": "Radio Next | راديو نكست",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/next.png",
+    "stream": "https://stream.zeno.fm/z6duygngt68uv.m3u"
+  },
+  {
+    "id": "al-aghani",
+    "name": "إذاعة الأغاني",
+    "desc": "105.8 FM - إذاعة مصرية بث مباشر",
+    "freq": "105.8 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/al-aghani.png",
+    "stream": "https://www.maspero.eg/stream/13"
+  },
+  {
+    "id": "radyw-msr",
+    "name": "راديو مصر",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/radyw-msr.png",
+    "stream": "https://www.maspero.eg/stream/8"
+  },
+  {
+    "id": "adha-t-albrnamj-al-am",
+    "name": "إذاعة البرنامج العام",
+    "desc": "107.4 FM - إذاعة مصرية بث مباشر",
+    "freq": "107.4 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/adha-t-albrnamj-al-am.png",
+    "stream": "https://www.maspero.eg/stream/10"
+  },
+  {
+    "id": "adha-t-albrnamj-althqafy",
+    "name": "إذاعة البرنامج الثقافي",
+    "desc": "98.8 FM - إذاعة مصرية بث مباشر",
+    "freq": "98.8 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/adha-t-albrnamj-althqafy.png",
+    "stream": "https://www.maspero.eg/stream/12"
+  },
+  {
+    "id": "adha-t-alshrq-alawst",
+    "name": "إذاعة الشرق الأوسط",
+    "desc": "89.5 FM - إذاعة مصرية بث مباشر",
+    "freq": "89.5 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/adha-t-alshrq-alawst.png",
+    "stream": "https://www.maspero.eg/"
+  },
+  {
+    "id": "adha-t-swt-al-rb",
+    "name": "إذاعة صوت العرب",
+    "desc": "107.4 FM - إذاعة مصرية بث مباشر",
+    "freq": "107.4 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/adha-t-swt-al-rb.png",
+    "stream": "https://www.maspero.eg/stream/9"
+  },
+  {
+    "id": "great-cairo",
+    "name": "إذاعة القاهرة الكبرى",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/great-cairo.png",
+    "stream": "https://www.maspero.eg/stream/14"
+  },
+  {
+    "id": "nagham-fm",
+    "name": "نغم أف أم",
+    "desc": "105.3 FM - إذاعة مصرية بث مباشر",
+    "freq": "105.3 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/nagham-fm.png",
+    "stream": "http://ahmsamir.radioca.st/listen.pls?sid=1"
+  },
+  {
+    "id": "arabic-90s-fm",
+    "name": "التسعينات أف أم",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/arabic-90s-fm.png",
+    "stream": "http://178.33.135.244:20095/listen.pls?sid=1"
+  },
+  {
+    "id": "st-markos",
+    "name": "راديو كنيسة مارمرقس",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/st-markos.png",
+    "stream": "http://stream.radiojar.com/hrec7yp7nzzuv.m3u"
+  },
+  {
+    "id": "call-to-salvation",
+    "name": "راديو نداء الخلاص",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/call-to-salvation.png",
+    "stream": "https://i7.streams.ovh/sc/hoperad2/stream"
+  },
+  {
+    "id": "al-ahram",
+    "name": "إذاعة الأهرام",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/al-ahram.png",
+    "stream": "https://gate.ahram.org.eg/Daily/"
+  },
+  {
+    "id": "better-life",
+    "name": "راديو الحياة الأفضل",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/better-life.png",
+    "stream": "http://stream.radiojar.com/kc1d6k9ymy5tv.m3u"
+  },
+  {
+    "id": "arab-mix",
+    "name": "راديو مكس عربي",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/arab-mix.png",
+    "stream": "https://stream.zeno.fm/na3vpvn10qruv.m3u"
+  },
+  {
+    "id": "shaabi-95",
+    "name": "شعبيي أف أم",
+    "desc": "95.0 FM - إذاعة مصرية بث مباشر",
+    "freq": "95.0 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/shaabi-95.png",
+    "stream": "http://radio95.radioca.st/listen.pls?sid=1"
+  },
+  {
+    "id": "misrfone",
+    "name": "إذاعة مصرفون",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/misrfone.png",
+    "stream": "http://16.192.192.242/listen/misrfone/radio.mp3"
+  },
+  {
+    "id": "rakoty",
+    "name": "راديو الاسكندرية القبطية",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/rakoty.png",
+    "stream": "http://sc-e1.streamcyclone.com:1935/rakoty_live/rakotyaudio/playlist.m3u8"
+  },
+  {
+    "id": "saint-mary-church-zeitoun",
+    "name": "راديو عذراء الزيتون",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/saint-mary-church-zeitoun.png",
+    "stream": "https://cast.az-streamingserver.com/proxy/stmary?mp=/stream"
+  },
+  {
+    "id": "arabesk",
+    "name": "أربيسك أف أم",
+    "desc": "102.3 FM - إذاعة مصرية بث مباشر",
+    "freq": "102.3 FM",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/arabesk.png",
+    "stream": "http://185.4.87.79:8000/stream.mp3.m3u"
+  },
+  {
+    "id": "radyw-alaqbat-24",
+    "name": "راديو الأقباط 24",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/radyw-alaqbat-24.png",
+    "stream": "http://66.70.249.70:5828/listen.pls?sid=1"
+  },
+  {
+    "id": "radyw-alwan-fm",
+    "name": "راديو ألوان FM",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/radyw-alwan-fm.png",
+    "stream": "https://stream.zeno.fm/fhhhcrvxhchvv.m3u"
+  },
+  {
+    "id": "radyw-alrjal-fm",
+    "name": "راديو الرجال FM",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/radyw-alrjal-fm.png",
+    "stream": "https://stream.zeno.fm/ebitxokyr7ptv.m3u"
+  },
+  {
+    "id": "arab-mix-drama",
+    "name": "Arab Mix Drama",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/arab-mix-drama.png",
+    "stream": "https://stream.zeno.fm/egynebf171zuv.m3u"
+  },
+  {
+    "id": "radio-bidaya",
+    "name": "راديو بداية",
+    "desc": "Stream - إذاعة مصرية بث مباشر",
+    "freq": "Stream",
+    "logo": "https://cdn.instant.audio/images/logos/egyptradio-net/radio-bidaya.png",
+    "stream": "https://radiobidaya.duckdns.org/listen/bidaya/radio.mp3"
+  }
+]
