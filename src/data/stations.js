@@ -136,7 +136,7 @@ export const STATIONS = [
     name: "إذاعة أم كلثوم - كوكب الشرق",
     desc: "روائع وأغاني كوكب الشرق أم كلثوم بدون توقف",
     freq: "تراث مصري",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Umm_Kulthum4.jpg/512px-Umm_Kulthum4.jpg",
+    logo: "/om_kulthum.jpg",
     stream: "https://stream.zeno.fm/zsgrfxg71s8uv"
   },
   {
@@ -144,7 +144,7 @@ export const STATIONS = [
     name: "إذاعة عبد الحليم حافظ",
     desc: "أجمل أغاني وألحان العندليب الأسمر عبد الحليم حافظ",
     freq: "تراث مصري",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Abdel_Halim_Hafez.jpg/512px-Abdel_Halim_Hafez.jpg",
+    logo: "/abdel_halim.jpg",
     stream: "https://stream.zeno.fm/8a4eqkd0pnhvv"
   },
   {
@@ -152,7 +152,7 @@ export const STATIONS = [
     name: "راديو الهضبة عمرو دياب",
     desc: "جميع ألبومات وأغاني الهضبة عمرو دياب على مدار الساعة",
     freq: "راديو دياب",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Amr_Diab_With_World_Music_Awards.jpg/512px-Amr_Diab_With_World_Music_Awards.jpg",
+    logo: "/amr_diab.jpg",
     stream: "https://stream-40.zeno.fm/xa4yhh4k838uv"
   }
 ];

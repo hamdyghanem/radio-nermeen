@@ -462,10 +462,19 @@ html, body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
-.station-card.playing {
+.station-card.playing,
+.station-card.is-selected {
   border-color: var(--accent-rose);
-  background: linear-gradient(180deg, rgba(255, 78, 136, 0.15), var(--bg-card));
-  box-shadow: 0 0 25px var(--accent-rose-glow);
+  background: linear-gradient(180deg, rgba(255, 78, 136, 0.13), var(--bg-card));
+  box-shadow: 0 0 0 2px rgba(255, 78, 136, 0.4), 0 8px 28px rgba(255, 78, 136, 0.2);
+  transform: translateY(-2px);
+}
+
+.station-card.is-playing {
+  border-color: var(--accent-rose);
+  background: linear-gradient(180deg, rgba(255, 78, 136, 0.18), var(--bg-card));
+  box-shadow: 0 0 0 2px var(--accent-rose), 0 0 30px var(--accent-rose-glow), 0 8px 24px rgba(0,0,0,0.35);
+  transform: translateY(-2px);
 }
 
 /* Love Favorite Button on Card */
@@ -508,41 +517,51 @@ html, body {
   height: 76px;
   border-radius: var(--radius-md);
   margin-top: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   background: #111524;
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.station-card.is-playing .station-logo-wrapper {
+  box-shadow: 0 0 0 2px var(--accent-rose), 0 0 18px var(--accent-rose-glow);
 }
 
 .station-logo { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
 
-.play-overlay {
+/* Animated equalizer bars — only visible on the actively playing card */
+.playing-indicator {
   position: absolute;
-  inset: 0;
-  background: rgba(11, 13, 20, 0.6);
-  border-radius: var(--radius-md);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
 }
 
-.station-card:hover .play-overlay { opacity: 1; }
-
-.play-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+.playing-indicator span {
+  width: 3px;
+  border-radius: 2px;
   background: var(--accent-rose);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px var(--accent-rose-glow);
+  box-shadow: 0 0 5px var(--accent-rose);
+  animation: eq-bar 0.75s ease-in-out infinite alternate;
+}
+
+.playing-indicator span:nth-child(1) { height: 6px;  animation-delay: 0s;    }
+.playing-indicator span:nth-child(2) { height: 13px; animation-delay: 0.15s; }
+.playing-indicator span:nth-child(3) { height: 8px;  animation-delay: 0.3s;  }
+.playing-indicator span:nth-child(4) { height: 14px; animation-delay: 0.08s; }
+.playing-indicator span:nth-child(5) { height: 5px;  animation-delay: 0.22s; }
+
+@keyframes eq-bar {
+  from { transform: scaleY(0.25); opacity: 0.6; }
+  to   { transform: scaleY(1);    opacity: 1;   }
 }
 
 .station-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
@@ -603,12 +622,12 @@ html, body {
   left: 0;
   right: 0;
   z-index: 90;
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  background: var(--bg-player);
-  border-top: var(--glass-border);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  background: linear-gradient(135deg, rgba(30, 10, 50, 0.97) 0%, rgba(60, 10, 40, 0.97) 50%, rgba(20, 15, 45, 0.97) 100%);
+  border-top: 1px solid rgba(255, 78, 136, 0.5);
   padding: 12px 20px calc(12px + var(--safe-bottom));
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 -8px 40px rgba(255, 78, 136, 0.2), 0 -2px 0 rgba(255, 78, 136, 0.35);
 }
 
 .player-wave { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: rgba(255, 255, 255, 0.05); overflow: hidden; }
