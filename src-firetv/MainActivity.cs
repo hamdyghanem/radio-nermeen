@@ -70,6 +70,11 @@ public class MainActivity : Activity
             -webkit-user-select: none !important;
             user-select: none !important;
         }
+        /* Hide mobile PWA installation banner on Fire TV */
+        .pwa-banner {
+            display: none !important;
+            visibility: hidden !important;
+        }
         /* Smooth scrolling */
         html, body {
             scroll-behavior: smooth !important;

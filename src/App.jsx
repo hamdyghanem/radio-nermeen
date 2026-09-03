@@ -7,7 +7,6 @@ import FavoritesShelf from './components/FavoritesShelf';
 import StationGrid from './components/StationGrid';
 import PlayerBar from './components/PlayerBar';
 import SleepTimerModal from './components/SleepTimerModal';
-import PwaBanner from './components/PwaBanner';
 import OfflineNotice from './components/OfflineNotice';
 import { STATIONS } from './data/stations';
 
@@ -32,7 +31,6 @@ export default function App() {
         <div className="light-blob blob-3"></div>
       </div>
 
-      <PwaBanner />
       <OfflineNotice />
 
       <div className="app-container">
