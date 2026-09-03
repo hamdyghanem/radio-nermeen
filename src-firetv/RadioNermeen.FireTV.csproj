@@ -12,6 +12,12 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 
     <AndroidPackageFormat>apk</AndroidPackageFormat>
+
+    <!-- Build a universal APK so it installs on every Fire TV device:
+         Fire TV Sticks are 32-bit (armeabi-v7a), Cube/newer are arm64,
+         emulators are x86/x64. Without this the APK may lack the device's
+         ABI and the install is rejected ("App failed to install"). -->
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
     <RootNamespace>RadioNermeen.FireTV</RootNamespace>
     <AssemblyName>RadioNermeen.FireTV</AssemblyName>
   </PropertyGroup>
