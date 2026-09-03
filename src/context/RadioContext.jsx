@@ -18,6 +18,10 @@ export function RadioProvider({ children }) {
     return JSON.parse(localStorage.getItem('nermeen_radio_recents') || '[]');
   });
 
+  // Sleep Timer
+  const [timerRemaining, setTimerRemaining] = useState(0); // in seconds
+  const timerRef = useRef(null);
+
   // Online / Offline state & Beep alert
   const [isOnline, setIsOnline] = useState(() => typeof navigator !== 'undefined' ? navigator.onLine : true);
   const audioCtxRef = useRef(null);

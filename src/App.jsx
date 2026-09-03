@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Heart } from 'lucide-react';
 import { RadioProvider } from './context/RadioContext';
 import Header from './components/Header';
 import LoveTicker from './components/LoveTicker';
@@ -64,6 +65,10 @@ export default function App() {
           <FavoritesShelf />
 
           <StationGrid stations={filteredStations} />
+
+          <footer className="app-footer">
+            <p>With my love <Heart className="footer-heart" size={16} fill="#ff4e88" color="#ff4e88" /> , Hamdi</p>
+          </footer>
         </main>
 
         <PlayerBar />

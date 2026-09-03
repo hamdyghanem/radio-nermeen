@@ -673,6 +673,41 @@ html, body {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* App Footer */
+.app-footer {
+  text-align: center;
+  padding: 24px 0 16px;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.app-footer p {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  direction: ltr;
+  letter-spacing: 0.5px;
+}
+
+.footer-heart {
+  display: inline-block;
+  vertical-align: middle;
+  animation: heartBeat 1.8s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.22); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.18); }
+  70% { transform: scale(1); }
+}
+
 /* =============================================
    iPhone / Mobile-First Optimizations
    ============================================= */
