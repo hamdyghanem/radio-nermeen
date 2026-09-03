@@ -18,6 +18,10 @@
          emulators are x86/x64. Without this the APK may lack the device's
          ABI and the install is rejected ("App failed to install"). -->
     <RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
+
+    <!-- Workaround for XAGNM7009 internal error during native marshal method
+         source generation when building the universal (multi-ABI) APK. -->
+    <AndroidEnableMarshalMethods>false</AndroidEnableMarshalMethods>
     <RootNamespace>RadioNermeen.FireTV</RootNamespace>
     <AssemblyName>RadioNermeen.FireTV</AssemblyName>
   </PropertyGroup>

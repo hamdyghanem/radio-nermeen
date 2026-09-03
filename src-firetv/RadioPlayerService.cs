@@ -181,7 +181,7 @@ public sealed class RadioPlayerService : Service, AudioManager.IOnAudioFocusChan
     {
         if (_audioManager == null) return true;
 #pragma warning disable CA1422 // Deprecated on API 26+ but still works; avoids AudioFocusRequest compat boilerplate
-        return _audioManager.RequestAudioFocus(this, Stream.Music, AudioFocus.Gain)
+        return _audioManager.RequestAudioFocus(this, Android.Media.Stream.Music, AudioFocus.Gain)
                == AudioFocusRequest.Granted;
 #pragma warning restore CA1422
     }
