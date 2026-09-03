@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="radio-nermeen.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="src-firetv/RadioNermeen.FireTV.csproj" />
+</Solution>

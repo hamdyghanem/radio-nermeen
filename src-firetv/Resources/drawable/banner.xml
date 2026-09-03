@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#0b0d14"
+        android:pathData="M0,0h320v180h-320z" />
+    <!-- Flower mark -->
+    <path android:fillColor="#ff5ea8" android:pathData="M60,66m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+    <path android:fillColor="#ff5ea8" android:pathData="M88,86m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+    <path android:fillColor="#ff5ea8" android:pathData="M78,118m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+    <path android:fillColor="#ff5ea8" android:pathData="M42,118m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+    <path android:fillColor="#ff5ea8" android:pathData="M32,86m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+    <path android:fillColor="#ffd24a" android:pathData="M60,92m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+</vector>
