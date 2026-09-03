@@ -12,6 +12,8 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 
     <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidUseFastDeployment>false</AndroidUseFastDeployment>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 
     <!-- Build a universal APK so it installs on every Fire TV device:
          Fire TV Sticks are 32-bit (armeabi-v7a), Cube/newer are arm64,

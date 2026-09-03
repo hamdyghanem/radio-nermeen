@@ -598,6 +598,25 @@ html, body {
 
 .modal-header { display: flex; align-items: center; justify-content: space-between; }
 .close-modal { background: none; border: none; color: var(--text-muted); cursor: pointer; }
+
+/* Fire TV / D-Pad Remote Navigation Focus States */
+.station-card:focus,
+.station-card:focus-visible,
+.station-card.tv-focused {
+  outline: none !important;
+  transform: scale(1.08) translateY(-6px) !important;
+  box-shadow: 0 0 0 3px #ff4e88, 0 16px 36px rgba(255, 78, 136, 0.6) !important;
+  border-color: #ff4e88 !important;
+  z-index: 50 !important;
+}
+
+.play-btn:focus,
+.play-btn:focus-visible,
+.play-btn.tv-focused {
+  outline: none !important;
+  transform: scale(1.2) !important;
+  box-shadow: 0 0 0 4px #ffffff, 0 0 30px #ff4e88 !important;
+}
 .modal-sub { font-size: 0.88rem; color: var(--text-secondary); }
 
 .timer-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
