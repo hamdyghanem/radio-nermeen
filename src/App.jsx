@@ -3,8 +3,6 @@ import { Heart } from 'lucide-react';
 import { RadioProvider } from './context/RadioContext';
 import Header from './components/Header';
 import LoveTicker from './components/LoveTicker';
-import WelcomeBanner from './components/WelcomeBanner';
-import SearchAndFilter from './components/SearchAndFilter';
 import FavoritesShelf from './components/FavoritesShelf';
 import StationGrid from './components/StationGrid';
 import PlayerBar from './components/PlayerBar';
@@ -14,7 +12,6 @@ import OfflineNotice from './components/OfflineNotice';
 import { STATIONS } from './data/stations';
 
 export default function App() {
-  const [searchQuery, setSearchQuery] = useState('');
   const [isTimerOpen, setIsTimerOpen] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('hn_theme') || 'dark');
 
@@ -26,13 +23,6 @@ export default function App() {
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
-
-  // Filter stations based on search query only
-  const filteredStations = STATIONS.filter(station => {
-    return station.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           station.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           station.freq.toLowerCase().includes(searchQuery.toLowerCase());
-  });
 
   return (
     <RadioProvider>
@@ -55,16 +45,9 @@ export default function App() {
         <LoveTicker />
 
         <main className="main-content">
-          <WelcomeBanner />
-
-          <SearchAndFilter 
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-
           <FavoritesShelf />
 
-          <StationGrid stations={filteredStations} />
+          <StationGrid stations={STATIONS} />
 
           <footer className="app-footer">
             <p>With my love <Heart className="footer-heart" size={16} fill="#ff4e88" color="#ff4e88" /> , Hamdi</p>

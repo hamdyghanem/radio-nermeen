@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { STATIONS } from '../data/stations';
 
 const RadioContext = createContext();
@@ -8,7 +8,7 @@ export function RadioProvider({ children }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Favorites state: Nermeen's favorites
+  // Favorites state
   const [favorites, setFavorites] = useState(() => {
     return JSON.parse(localStorage.getItem('nermeen_radio_favs') || '[]');
   });
@@ -19,32 +19,41 @@ export function RadioProvider({ children }) {
   });
 
   // Sleep Timer
-  const [timerRemaining, setTimerRemaining] = useState(0); // in seconds
+  const [timerRemaining, setTimerRemaining] = useState(0);
   const timerRef = useRef(null);
 
-  // Online / Offline state & Beep alert
-  const [isOnline, setIsOnline] = useState(() => typeof navigator !== 'undefined' ? navigator.onLine : true);
+  // Audio HTML5 ref
+  const audioRef = useRef(null);
+
+  // Store current station in a ref so callbacks access it without stale closures
+  const currentStationRef = useRef(null);
+
+  // Online / Offline state
+  const [isOnline, setIsOnline] = useState(() =>
+    typeof navigator !== 'undefined' ? navigator.onLine : true
+  );
   const audioCtxRef = useRef(null);
 
-  // Synthesize warning beep for disconnection using Web Audio API (works 100% offline)
-  const triggerDisconnectBeep = () => {
+  // Auto-reconnect tracking
+  const reconnectRef = useRef(null);
+  const stallTimerRef = useRef(null);
+
+  // Synthesize warning beep for disconnection using Web Audio API (works offline)
+  const triggerDisconnectBeep = useCallback(() => {
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (!AudioContextClass) return;
-      
+
       if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
         audioCtxRef.current = new AudioContextClass();
       }
-      
+
       const ctx = audioCtxRef.current;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
+      if (ctx.state === 'suspended') ctx.resume();
 
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      // Dual-tone double beep (880Hz / A5 warning)
       osc.type = 'sine';
       osc.frequency.setValueAtTime(880, ctx.currentTime);
       osc.frequency.setValueAtTime(660, ctx.currentTime + 0.15);
@@ -60,20 +69,139 @@ export function RadioProvider({ children }) {
     } catch (err) {
       console.warn('Web Audio beep error:', err);
     }
-  };
+  }, []);
 
-  // Monitor network status & run repeating beep when disconnected
+  // MediaSession setup - call after user gesture for iOS to register
+  const updateMediaSession = useCallback((station, playing) => {
+    if (!('mediaSession' in navigator)) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: station.name,
+      artist: `${station.freq} • بث مباشر`,
+      album: 'راديو نرمين 🌸',
+      artwork: [
+        { src: station.logo, sizes: '512x512', type: 'image/png' },
+        { src: station.logo, sizes: '192x192', type: 'image/png' },
+      ],
+    });
+
+    // Update playback state so lock screen shows correct icon
+    navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
+  }, []);
+
+  // Audio element creation (once on mount)
+  useEffect(() => {
+    const audio = new Audio();
+    audio.preload = 'none';
+    // NOTE: Do NOT set crossOrigin = 'anonymous' - it breaks many radio streams on iOS
+    // and prevents background audio from continuing when screen locks.
+
+    audio.onwaiting = () => setIsLoading(true);
+
+    audio.onplaying = () => {
+      setIsLoading(false);
+      setIsPlaying(true);
+      if (stallTimerRef.current) clearTimeout(stallTimerRef.current);
+      if (currentStationRef.current) {
+        updateMediaSession(currentStationRef.current, true);
+      }
+    };
+
+    audio.onpause = () => {
+      setIsPlaying(false);
+      if (currentStationRef.current) {
+        updateMediaSession(currentStationRef.current, false);
+      }
+    };
+
+    audio.onstalled = () => {
+      // Stalled: stream froze. Wait 5s then try reconnecting
+      setIsLoading(true);
+      if (stallTimerRef.current) clearTimeout(stallTimerRef.current);
+      stallTimerRef.current = setTimeout(() => {
+        if (currentStationRef.current && navigator.onLine) {
+          console.log('[Radio] Stream stalled, reconnecting...');
+          audio.src = currentStationRef.current.stream;
+          audio.load();
+          audio.play().catch(console.warn);
+        }
+      }, 5000);
+    };
+
+    audio.onerror = () => {
+      setIsLoading(false);
+      setIsPlaying(false);
+      if (!navigator.onLine) {
+        setIsOnline(false);
+        return;
+      }
+      // Auto-reconnect after 3 seconds on stream error
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
+      if (currentStationRef.current) {
+        reconnectRef.current = setTimeout(() => {
+          if (currentStationRef.current && navigator.onLine) {
+            console.log('[Radio] Stream error, reconnecting...');
+            audio.src = currentStationRef.current.stream;
+            audio.load();
+            audio.play().catch(console.warn);
+          }
+        }, 3000);
+      }
+    };
+
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
+      if (stallTimerRef.current) clearTimeout(stallTimerRef.current);
+    };
+  }, [updateMediaSession]);
+
+  // MediaSession action handlers (registered once)
+  useEffect(() => {
+    if (!('mediaSession' in navigator)) return;
+
+    const resume = () => {
+      if (audioRef.current && currentStationRef.current) {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(console.warn);
+      }
+    };
+
+    const pause = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      }
+    };
+
+    navigator.mediaSession.setActionHandler('play', resume);
+    navigator.mediaSession.setActionHandler('pause', pause);
+    navigator.mediaSession.setActionHandler('stop', pause);
+    // Remove seek handlers - don't apply to live radio
+    try {
+      navigator.mediaSession.setActionHandler('seekto', null);
+      navigator.mediaSession.setActionHandler('seekbackward', null);
+      navigator.mediaSession.setActionHandler('seekforward', null);
+    } catch (_) {}
+  }, []);
+
+  // Network monitor
   useEffect(() => {
     let beepInterval = null;
 
     const handleOnline = () => {
       setIsOnline(true);
       if (beepInterval) clearInterval(beepInterval);
-      // Auto reconnect stream if active
-      if (currentStation && audioRef.current) {
-        audioRef.current.src = currentStation.stream;
+      if (currentStationRef.current && audioRef.current) {
+        audioRef.current.src = currentStationRef.current.stream;
         audioRef.current.load();
-        audioRef.current.play().then(() => setIsPlaying(true)).catch(console.warn);
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(console.warn);
       }
     };
 
@@ -88,9 +216,7 @@ export function RadioProvider({ children }) {
 
     if (!isOnline) {
       triggerDisconnectBeep();
-      beepInterval = setInterval(() => {
-        triggerDisconnectBeep();
-      }, 2500);
+      beepInterval = setInterval(() => triggerDisconnectBeep(), 2500);
     }
 
     return () => {
@@ -98,37 +224,9 @@ export function RadioProvider({ children }) {
       window.removeEventListener('offline', handleOffline);
       if (beepInterval) clearInterval(beepInterval);
     };
-  }, [isOnline, currentStation]);
+  }, [isOnline, triggerDisconnectBeep]);
 
-  useEffect(() => {
-    audioRef.current = new Audio();
-    audioRef.current.preload = 'none';
-    audioRef.current.crossOrigin = 'anonymous';
-
-    audioRef.current.onwaiting = () => setIsLoading(true);
-    audioRef.current.onplaying = () => {
-      setIsLoading(false);
-      setIsPlaying(true);
-    };
-    audioRef.current.onpause = () => setIsPlaying(false);
-    audioRef.current.onerror = () => {
-      setIsLoading(false);
-      setIsPlaying(false);
-      // Check if error is caused by loss of internet
-      if (!navigator.onLine) {
-        setIsOnline(false);
-      }
-    };
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-      }
-    };
-  }, []);
-
-  // Save favorites to localStorage
+  // Persist state
   useEffect(() => {
     localStorage.setItem('nermeen_radio_favs', JSON.stringify(favorites));
   }, [favorites]);
@@ -137,14 +235,15 @@ export function RadioProvider({ children }) {
     localStorage.setItem('nermeen_radio_recents', JSON.stringify(recents));
   }, [recents]);
 
-  // Sleep Timer countdown ticker
+  // Sleep Timer countdown
   useEffect(() => {
     if (timerRemaining > 0) {
       timerRef.current = setInterval(() => {
         setTimerRemaining(prev => {
           if (prev <= 1) {
             clearInterval(timerRef.current);
-            pauseAudio();
+            if (audioRef.current) audioRef.current.pause();
+            setIsPlaying(false);
             return 0;
           }
           return prev - 1;
@@ -153,82 +252,83 @@ export function RadioProvider({ children }) {
     } else {
       clearInterval(timerRef.current);
     }
-
     return () => clearInterval(timerRef.current);
   }, [timerRemaining > 0]);
 
   // Play a specific station
-  const playStation = (station) => {
-    if (currentStation?.id === station.id) {
+  const playStation = useCallback((station) => {
+    if (currentStationRef.current?.id === station.id) {
       if (isPlaying) {
-        pauseAudio();
+        audioRef.current?.pause();
+        setIsPlaying(false);
       } else {
-        resumeAudio();
+        audioRef.current?.play()
+          .then(() => setIsPlaying(true))
+          .catch(console.warn);
       }
       return;
     }
 
+    currentStationRef.current = station;
     setCurrentStation(station);
     setIsLoading(true);
-    
-    // Update Recents
-    setRecents(prev => [station.id, ...prev.filter(id => id !== station.id)].slice(0, 8));
+
+    if (reconnectRef.current) clearTimeout(reconnectRef.current);
+    if (stallTimerRef.current) clearTimeout(stallTimerRef.current);
+
+    setRecents(prev =>
+      [station.id, ...prev.filter(id => id !== station.id)].slice(0, 8)
+    );
 
     if (audioRef.current) {
       audioRef.current.src = station.stream;
       audioRef.current.load();
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-        setIsLoading(false);
-      }).catch(err => {
-        console.warn('Audio playback error:', err);
-        setIsLoading(false);
-        setIsPlaying(false);
-      });
+      audioRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+          setIsLoading(false);
+          updateMediaSession(station, true);
+        })
+        .catch(err => {
+          console.warn('Audio playback error:', err);
+          setIsLoading(false);
+          setIsPlaying(false);
+        });
     }
 
-    // MediaSession iOS lockscreen controls
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: station.name,
-        artist: `${station.freq} • بث مباشر`,
-        album: 'راديو نرمين 🌸',
-        artwork: [{ src: station.logo, sizes: '512x512', type: 'image/png' }]
-      });
+    updateMediaSession(station, true);
+  }, [isPlaying, updateMediaSession]);
 
-      navigator.mediaSession.setActionHandler('play', () => resumeAudio());
-      navigator.mediaSession.setActionHandler('pause', () => pauseAudio());
+  const resumeAudio = useCallback(() => {
+    if (audioRef.current && currentStationRef.current) {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(console.warn);
     }
-  };
+  }, []);
 
-  const resumeAudio = () => {
-    if (audioRef.current && currentStation) {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(console.warn);
-    }
-  };
-
-  const pauseAudio = () => {
+  const pauseAudio = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false);
     }
-  };
+  }, []);
 
-  // Toggle favorite ❤️
-  const toggleFavorite = (stationId) => {
-    setFavorites(prev => 
-      prev.includes(stationId) ? prev.filter(id => id !== stationId) : [...prev, stationId]
+  const toggleFavorite = useCallback((stationId) => {
+    setFavorites(prev =>
+      prev.includes(stationId)
+        ? prev.filter(id => id !== stationId)
+        : [...prev, stationId]
     );
-  };
+  }, []);
 
-  // Sleep timer setter
-  const startSleepTimer = (minutes) => {
+  const startSleepTimer = useCallback((minutes) => {
     setTimerRemaining(minutes * 60);
-  };
+  }, []);
 
-  const cancelSleepTimer = () => {
+  const cancelSleepTimer = useCallback(() => {
     setTimerRemaining(0);
-  };
+  }, []);
 
   return (
     <RadioContext.Provider value={{
@@ -245,7 +345,7 @@ export function RadioProvider({ children }) {
       toggleFavorite,
       startSleepTimer,
       cancelSleepTimer,
-      triggerDisconnectBeep
+      triggerDisconnectBeep,
     }}>
       {children}
     </RadioContext.Provider>

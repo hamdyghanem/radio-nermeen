@@ -1,14 +1,6 @@
 // EgyptRadio verified streams and authentic station icons from egyptradio.net
 export const STATIONS = [
   {
-    id: "9090",
-    name: "الراديو 9090 FM",
-    desc: "هواها مصري - الإذاعة الأكثر انتشاراً وتنوعاً في مصر",
-    freq: "90.9 FM",
-    logo: "https://cdn.instant.audio/images/logos/egyptradio-net/9090.png",
-    stream: "https://9090streaming.mobtada.com/9090FMEGYPT"
-  },
-  {
     id: "nogoum-fm",
     name: "نجوم أف أم - Nogoum FM",
     desc: "إذاعة النجوم الأولى والأقوى في مصر والوطن العربي",
@@ -120,14 +112,7 @@ export const STATIONS = [
     logo: "https://cdn.instant.audio/images/logos/egyptradio-net/egonair.png",
     stream: "https://radio.socialgenix.com/8004/stream"
   },
-  {
-    id: "next",
-    name: "راديو نكست - Radio Next",
-    desc: "أحدث الأغاني والموسيقى والبرامج الشبابية الحديثة",
-    freq: "Next FM",
-    logo: "https://cdn.instant.audio/images/logos/egyptradio-net/next.png",
-    stream: "https://stream.zeno.fm/z6duygngt68uv"
-  },
+
   {
     id: "sotak",
     name: "راديو صوتك - Radio Sotak",
@@ -136,14 +121,7 @@ export const STATIONS = [
     logo: "https://cdn.instant.audio/images/logos/egyptradio-net/sotak.png",
     stream: "https://radio.radiosotak.com/sotak_mp3"
   },
-  {
-    id: "radio-masr",
-    name: "راديو مصر - Radio Masr",
-    desc: "صوت مصر على مدار الساعة، برامج إخبارية وحوارية متجددة",
-    freq: "88.7 FM",
-    logo: "https://cdn.instant.audio/images/logos/egyptradio-net/radyw-msr.png",
-    stream: "https://stream.radiojar.com/39w03q47x7zuv"
-  },
+
   {
     id: "al-aghani",
     name: "إذاعة الأغاني المصرية الرسمية",
@@ -152,20 +130,13 @@ export const STATIONS = [
     logo: "https://cdn.instant.audio/images/logos/egyptradio-net/al-aghani.png",
     stream: "https://stream.zeno.fm/frvxg7wgeq8uv"
   },
-  {
-    id: "al-ahram",
-    name: "إذاعة الأهرام - Al Ahram Radio",
-    desc: "صوت وأخبار وتغطيات مؤسسة الأهرام العريقة",
-    freq: "أونلاين",
-    logo: "https://cdn.instant.audio/images/logos/egyptradio-net/al-ahram.png",
-    stream: "https://stream.zeno.fm/zsgrfxg71s8uv"
-  },
+
   {
     id: "om-kalthoum",
     name: "إذاعة أم كلثوم - كوكب الشرق",
     desc: "روائع وأغاني كوكب الشرق أم كلثوم بدون توقف",
     freq: "تراث مصري",
-    logo: "https://cdn-icons-png.flaticon.com/512/3659/3659738.png",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Umm_Kulthum4.jpg/512px-Umm_Kulthum4.jpg",
     stream: "https://stream.zeno.fm/zsgrfxg71s8uv"
   },
   {
@@ -173,7 +144,7 @@ export const STATIONS = [
     name: "إذاعة عبد الحليم حافظ",
     desc: "أجمل أغاني وألحان العندليب الأسمر عبد الحليم حافظ",
     freq: "تراث مصري",
-    logo: "https://cdn-icons-png.flaticon.com/512/2907/2907254.png",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Abdel_Halim_Hafez.jpg/512px-Abdel_Halim_Hafez.jpg",
     stream: "https://stream.zeno.fm/8a4eqkd0pnhvv"
   },
   {
@@ -181,7 +152,7 @@ export const STATIONS = [
     name: "راديو الهضبة عمرو دياب",
     desc: "جميع ألبومات وأغاني الهضبة عمرو دياب على مدار الساعة",
     freq: "راديو دياب",
-    logo: "https://cdn-icons-png.flaticon.com/512/461/461238.png",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Amr_Diab_With_World_Music_Awards.jpg/512px-Amr_Diab_With_World_Music_Awards.jpg",
     stream: "https://stream-40.zeno.fm/xa4yhh4k838uv"
   }
 ];
