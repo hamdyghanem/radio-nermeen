@@ -1,4 +1,5 @@
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
@@ -8,10 +9,15 @@ using Android.Widget;
 namespace RadioNermeen.FireTV;
 
 [Activity(
+    Name = "com.nilefusion.radionermeen.MainActivity",
     Label = "Radio Nermeen",
+    Exported = true,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.KeyboardHidden | ConfigChanges.UiMode,
     ScreenOrientation = ScreenOrientation.Landscape,
     Theme = "@android:style/Theme.NoTitleBar.Fullscreen")]
+[IntentFilter(
+    new[] { Intent.ActionMain },
+    Categories = new[] { Intent.CategoryLauncher, "android.intent.category.LEANBACK_LAUNCHER" })]
 public class MainActivity : Activity
 {
     private const string AppUrl = "https://radionermeen.azurewebsites.net";
