@@ -6,7 +6,7 @@ export const STATIONS = [
     desc: "إذاعة النجوم الأولى والأقوى في مصر والوطن العربي",
     freq: "100.6 FM",
     logo: "https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png",
-    stream: "https://stream-159.zeno.fm/qb1zvsykm98uv"
+    stream: "https://audio.nrpstream.com/listen/nogoumfm/radio.mp3"
   },
   {
     id: "mega-fm-92-7",
@@ -146,13 +146,5 @@ export const STATIONS = [
     freq: "تراث مصري",
     logo: "/abdel_halim.jpg",
     stream: "https://stream.zeno.fm/8a4eqkd0pnhvv"
-  },
-  {
-    id: "amr-diab",
-    name: "راديو الهضبة عمرو دياب",
-    desc: "جميع ألبومات وأغاني الهضبة عمرو دياب على مدار الساعة",
-    freq: "راديو دياب",
-    logo: "/amr_diab.jpg",
-    stream: "https://stream-40.zeno.fm/xa4yhh4k838uv"
   }
 ];
