@@ -3,14 +3,20 @@
           android:versionCode="1"
           android:versionName="1.0">
 
+  <!-- Network access for streaming -->
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+  <!-- Required to call StartForeground() -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <!-- Required on API 34+ (Android 14) for foreground services of type mediaPlayback -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
   <!-- Fire TV / Android TV: touchscreen not required, leanback preferred -->
   <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-  <uses-feature android:name="android.software.leanback" android:required="false" />
-  <uses-feature android:name="android.hardware.microphone" android:required="false" />
+  <uses-feature android:name="android.software.leanback"    android:required="false" />
+  <uses-feature android:name="android.hardware.microphone"  android:required="false" />
 
   <application android:label="Radio Nermeen"
                android:icon="@drawable/appicon"
@@ -18,7 +24,18 @@
                android:allowBackup="true"
                android:hardwareAccelerated="true"
                android:usesCleartextTraffic="true"
+               android:supportsRtl="true"
                android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+    <!--
+      Foreground service that keeps audio alive when the user navigates away.
+      foregroundServiceType="mediaPlayback" is required on API 29+ for media playback
+      services; without it the system may kill the service while audio is active.
+    -->
+    <service
+        android:name="com.nilefusion.radionermeen.RadioPlayerService"
+        android:foregroundServiceType="mediaPlayback"
+        android:exported="false" />
 
   </application>
 </manifest>

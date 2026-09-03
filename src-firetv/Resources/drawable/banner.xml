@@ -1,17 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fire TV home-screen banner  (320 × 180 dp logical canvas).
+  Displayed at roughly 400 × 225 px on a 1080p TV.
+
+  Layout
+  ──────
+  Left half  : Logo mark (flower) + concentric radio-wave rings
+  Center line: Thin accent separator
+  Right half : Animated-style waveform bars fading left → right
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="320dp"
     android:height="180dp"
     android:viewportWidth="320"
     android:viewportHeight="180">
-    <path
-        android:fillColor="#000000"
-        android:pathData="M0,0h320v180h-320z" />
-    <!-- Flower mark -->
-    <path android:fillColor="#ff5ea8" android:pathData="M60,66m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
-    <path android:fillColor="#ff5ea8" android:pathData="M88,86m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
-    <path android:fillColor="#ff5ea8" android:pathData="M78,118m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
-    <path android:fillColor="#ff5ea8" android:pathData="M42,118m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
-    <path android:fillColor="#ff5ea8" android:pathData="M32,86m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
-    <path android:fillColor="#ffd24a" android:pathData="M60,92m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0" />
+
+    <!-- ── Backgrounds ──────────────────────────────────────────────────── -->
+
+    <!-- Deep black base -->
+    <path android:fillColor="#000000"
+          android:pathData="M0,0h320v180h-320z" />
+
+    <!-- Very subtle left-panel dark blue tint for depth -->
+    <path android:fillColor="#06080F"
+          android:pathData="M0,0h150v180h-150z" />
+
+    <!-- ── Radio-wave rings (concentric, centered on logo) ──────────────── -->
+
+    <!-- Outermost ring — very faint -->
+    <path android:strokeColor="#ff5ea812"
+          android:strokeWidth="1.5"
+          android:fillColor="#00000000"
+          android:pathData="M75,90m-62,0a62,62 0,1 1,124 0a62,62 0,1 1,-124 0" />
+
+    <path android:strokeColor="#ff5ea820"
+          android:strokeWidth="1.5"
+          android:fillColor="#00000000"
+          android:pathData="M75,90m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+
+    <path android:strokeColor="#ff5ea835"
+          android:strokeWidth="1.5"
+          android:fillColor="#00000000"
+          android:pathData="M75,90m-35,0a35,35 0,1 1,70 0a35,35 0,1 1,-70 0" />
+
+    <!-- Inner ring — brighter -->
+    <path android:strokeColor="#ff5ea855"
+          android:strokeWidth="1.5"
+          android:fillColor="#00000000"
+          android:pathData="M75,90m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0" />
+
+    <!-- ── Flower logo mark ──────────────────────────────────────────────── -->
+    <!-- Five pink petals arranged in a ring, yellow center -->
+
+    <!-- Top petal -->
+    <path android:fillColor="#ff5ea8"
+          android:pathData="M75,73m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <!-- Upper-right petal -->
+    <path android:fillColor="#ff5ea8"
+          android:pathData="M92,83m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <!-- Lower-right petal -->
+    <path android:fillColor="#ff5ea8"
+          android:pathData="M86,103m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <!-- Lower-left petal -->
+    <path android:fillColor="#ff5ea8"
+          android:pathData="M64,103m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <!-- Upper-left petal -->
+    <path android:fillColor="#ff5ea8"
+          android:pathData="M58,83m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <!-- Center — gold -->
+    <path android:fillColor="#ffd24a"
+          android:pathData="M75,90m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+
+    <!-- ── Accent vertical separator ────────────────────────────────────── -->
+    <path android:fillColor="#ff5ea8"
+          android:pathData="M150,20h1.5v140h-1.5z" />
+
+    <!-- ── Waveform bars (right panel, peak in the middle) ──────────────── -->
+
+    <!-- Bar 1 (leftmost, shortest) -->
+    <path android:fillColor="#ff5ea825"
+          android:pathData="M161,72h5v36h-5z" />
+    <!-- Bar 2 -->
+    <path android:fillColor="#ff5ea835"
+          android:pathData="M170,62h5v56h-5z" />
+    <!-- Bar 3 -->
+    <path android:fillColor="#ff5ea845"
+          android:pathData="M179,48h5v84h-5z" />
+    <!-- Bar 4 — tall -->
+    <path android:fillColor="#ff5ea860"
+          android:pathData="M188,36h5v108h-5z" />
+    <!-- Bar 5 — tallest / peak -->
+    <path android:fillColor="#ff5ea878"
+          android:pathData="M197,28h5v124h-5z" />
+    <!-- Bar 6 -->
+    <path android:fillColor="#ff5ea860"
+          android:pathData="M206,40h5v100h-5z" />
+    <!-- Bar 7 -->
+    <path android:fillColor="#ff5ea845"
+          android:pathData="M215,52h5v76h-5z" />
+    <!-- Bar 8 -->
+    <path android:fillColor="#ff5ea835"
+          android:pathData="M224,62h5v56h-5z" />
+    <!-- Bar 9 -->
+    <path android:fillColor="#ff5ea825"
+          android:pathData="M233,72h5v36h-5z" />
+    <!-- Bar 10 (rightmost, shortest) -->
+    <path android:fillColor="#ff5ea815"
+          android:pathData="M242,80h5v20h-5z" />
+
+    <!-- Subtle horizontal base line under bars -->
+    <path android:fillColor="#ff5ea820"
+          android:pathData="M155,152h110v1.5h-110z" />
+
 </vector>
