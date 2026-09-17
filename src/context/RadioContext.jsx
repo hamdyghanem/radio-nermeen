@@ -251,26 +251,37 @@ export function RadioProvider({ children }) {
     };
   }, [updateMediaSession, startLiveStream]);
 
-  // Next / Previous station for iOS lockscreen & controls
+  // Next / Previous station for iOS lockscreen & steering wheel
   const playNextStation = useCallback(() => {
     if (!currentStationRef.current) return;
-    const currentIndex = STATIONS.findIndex(s => s.id === currentStationRef.current.id);
-    const nextIndex = (currentIndex + 1) % STATIONS.length;
-    const nextStation = STATIONS[nextIndex];
+    
+    // If user has favorited multiple stations, cycle favorites first!
+    const favStations = STATIONS.filter(s => favorites.includes(s.id));
+    const stationPool = favStations.length > 1 ? favStations : STATIONS;
+
+    const currentIndex = stationPool.findIndex(s => s.id === currentStationRef.current.id);
+    const nextIndex = (currentIndex + 1) % stationPool.length;
+    const nextStation = stationPool[nextIndex];
+
     currentStationRef.current = nextStation;
     setCurrentStation(nextStation);
     startLiveStream(nextStation);
-  }, [startLiveStream]);
+  }, [favorites, startLiveStream]);
 
   const playPrevStation = useCallback(() => {
     if (!currentStationRef.current) return;
-    const currentIndex = STATIONS.findIndex(s => s.id === currentStationRef.current.id);
-    const prevIndex = (currentIndex - 1 + STATIONS.length) % STATIONS.length;
-    const prevStation = STATIONS[prevIndex];
+
+    const favStations = STATIONS.filter(s => favorites.includes(s.id));
+    const stationPool = favStations.length > 1 ? favStations : STATIONS;
+
+    const currentIndex = stationPool.findIndex(s => s.id === currentStationRef.current.id);
+    const prevIndex = (currentIndex - 1 + stationPool.length) % stationPool.length;
+    const prevStation = stationPool[prevIndex];
+
     currentStationRef.current = prevStation;
     setCurrentStation(prevStation);
     startLiveStream(prevStation);
-  }, [startLiveStream]);
+  }, [favorites, startLiveStream]);
 
   // Keep refs in sync so MediaSession always invokes latest callbacks
   useEffect(() => {
@@ -279,7 +290,7 @@ export function RadioProvider({ children }) {
     startLiveStreamRef.current = startLiveStream;
   }, [playNextStation, playPrevStation, startLiveStream]);
 
-  // Network monitor
+  // Network monitor & audio recovery on focus / resume
   useEffect(() => {
     let beepInterval = null;
 
@@ -297,8 +308,17 @@ export function RadioProvider({ children }) {
       triggerDisconnectBeep();
     };
 
+    // Auto-resume live stream if interrupted by phone call / background suspend
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isPlaying && audioRef.current?.paused && currentStationRef.current) {
+        console.log('[Radio] Page visible, re-attaching live stream head...');
+        startLiveStream(currentStationRef.current);
+      }
+    };
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     if (!isOnline) {
       triggerDisconnectBeep();
@@ -308,9 +328,10 @@ export function RadioProvider({ children }) {
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (beepInterval) clearInterval(beepInterval);
     };
-  }, [isOnline, triggerDisconnectBeep, startLiveStream]);
+  }, [isOnline, isPlaying, triggerDisconnectBeep, startLiveStream]);
 
   // Live metadata polling for current station (API song info or Cairo schedule)
   useEffect(() => {
@@ -328,7 +349,7 @@ export function RadioProvider({ children }) {
       let resolvedMeta = {
         title: schedule ? schedule.title : station.name,
         artist: schedule ? schedule.artist : `${station.freq} • بث مباشر`,
-        art: ''
+        art: schedule?.art || ''
       };
 
       if (station.apiUrl) {
@@ -344,7 +365,7 @@ export function RadioProvider({ children }) {
               resolvedMeta = {
                 title: rawTitle,
                 artist: rawArtist || station.name,
-                art: rawArt.startsWith('http') ? rawArt : ''
+                art: rawArt.startsWith('http') ? rawArt : (schedule?.art || '')
               };
             }
           }
@@ -466,6 +487,7 @@ export function RadioProvider({ children }) {
   return (
     <RadioContext.Provider value={{
       currentStation,
+      STATIONS,
       nowPlaying,
       isPlaying,
       isLoading,

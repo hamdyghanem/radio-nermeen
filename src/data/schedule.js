@@ -1,9 +1,8 @@
-// Cairo Time Schedule & Now Playing Resolver for Egyptian Radio Stations
+// Cairo Time Schedule & Show Artwork Engine for Radio Nermeen
 
 export function getCairoNow() {
   try {
     const now = new Date();
-    // Use Intl API to extract Cairo local time components
     const formatter = new Intl.DateTimeFormat('en-US', {
       timeZone: 'Africa/Cairo',
       weekday: 'short',
@@ -32,212 +31,220 @@ export function getCairoNow() {
   }
 }
 
-export function getStationScheduleNow(stationId) {
-  const { day, hour } = getCairoNow();
+// Full Day Schedule Resolver
+export function getStationDailySchedule(stationId) {
+  const { day, hour: currentHour } = getCairoNow();
   const isWeekend = day === 'Fri' || day === 'Sat';
 
-  // 1. Nogoum FM (100.6 FM)
   if (stationId === 'nogoum-fm') {
     if (isWeekend) {
-      if (hour >= 8 && hour < 14) {
-        return {
-          title: 'صباح الويك إند وجمعة مباركة 🌸',
-          artist: 'نجوم إف إم 100.6'
-        };
-      }
-      if (hour >= 14 && hour < 18) {
-        return {
+      return [
+        {
+          start: '02:00',
+          end: '08:00',
+          startH: 2,
+          endH: 8,
+          title: 'نجوم زمان وأحلى أغاني الليل',
+          host: 'نجوم إف إم',
+          art: '/abdel_halim.jpg',
+          desc: 'روائع الأغاني الكلاسيكية والطرب الأصيل'
+        },
+        {
+          start: '08:00',
+          end: '14:00',
+          startH: 8,
+          endH: 14,
+          title: 'صباح الويك إند وجمعة مباركة',
+          host: 'نجوم إف إم',
+          art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+          desc: 'أغاني الصباح المبهجة وفقرات الويك إند'
+        },
+        {
+          start: '14:00',
+          end: '18:00',
+          startH: 14,
+          endH: 18,
           title: 'كوكتيل ويك إند نجوم',
-          artist: 'أجمل الأغاني والموسيقى'
-        };
-      }
-      if (hour >= 18 && hour < 20) {
-        return {
+          host: 'أجمل الأغاني المنوعة',
+          art: '/amr_diab.jpg',
+          desc: 'أحدث الأغاني العربية والمصرية المعاصرة'
+        },
+        {
+          start: '18:00',
+          end: '20:00',
+          startH: 18,
+          endH: 20,
           title: 'أجمد أغاني الأسبوع',
-          artist: 'نجوم إف إم 100.6'
-        };
-      }
-      if (hour >= 20 || hour < 2) {
-        return {
+          host: 'نجوم إف إم 100.6',
+          art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+          desc: 'سباق وتوب أغاني الأسبوع'
+        },
+        {
+          start: '20:00',
+          end: '02:00',
+          startH: 20,
+          endH: 26, // past midnight
           title: 'سهرة الويك إند وأحلى الأغاني',
-          artist: 'نجوم إف إم 100.6'
-        };
-      }
-      return {
-        title: 'نجوم زمان وأحلى أغاني الليل 🌙',
-        artist: 'نجوم إف إم 100.6'
-      };
+          host: 'نجوم إف إم 100.6',
+          art: '/om_kulthum.jpg',
+          desc: 'سهرة غنائية مميزة حتى الفجر'
+        }
+      ].map(item => ({
+        ...item,
+        isCurrent: item.endH > 24 
+          ? (currentHour >= item.startH || currentHour < item.endH - 24)
+          : (currentHour >= item.startH && currentHour < item.endH)
+      }));
     }
 
     // Weekdays (Sun - Thu)
-    if (hour >= 0 && hour < 2) {
-      if (day === 'Sun' || day === 'Tue') {
-        return {
-          title: 'برنامج: أنا والنجوم وهواك ❤️',
-          artist: 'أسامة منير • نجوم إف إم'
-        };
-      }
-      return {
-        title: 'أغاني وسهرة الليل 🌙',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
-    if (hour >= 2 && hour < 8) {
-      return {
+    const shows = [
+      {
+        start: '00:00',
+        end: '02:00',
+        startH: 0,
+        endH: 2,
+        title: (day === 'Sun' || day === 'Tue') ? 'برنامج: أنا والنجوم وهواك ❤️' : 'أغاني وسهرة الليل 🌙',
+        host: (day === 'Sun' || day === 'Tue') ? 'أسامة منير' : 'نجوم إف إم',
+        art: (day === 'Sun' || day === 'Tue') 
+          ? 'https://images.weserv.nl/?url=www.nogoumfm.net/wp-content/uploads/2015/09/Osama-Mounir.jpg&w=512&h=512&fit=cover'
+          : '/om_kulthum.jpg',
+        desc: 'أشهر البرامج العاطفية والاجتماعية في العالم العربي'
+      },
+      {
+        start: '02:00',
+        end: '08:00',
+        startH: 2,
+        endH: 8,
         title: 'نجوم زمان وأحلى الأغاني الكلاسيكية 🎶',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
-    if (hour >= 8 && hour < 10) {
-      return {
+        host: 'نجوم إف إم 100.6',
+        art: '/abdel_halim.jpg',
+        desc: 'كلوديات وأغاني الزمن الجميل في هدوء الليل'
+      },
+      {
+        start: '08:00',
+        end: '10:00',
+        startH: 8,
+        endH: 10,
         title: 'برنامج: عيش صباحك ☀️',
-        artist: 'يوسف التهامي وفانا إمام'
-      };
-    }
-    if (hour >= 10 && hour < 12) {
-      return {
-        title: 'ساعة مع نجم وأحلى الأغاني',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
-    if (hour >= 12 && hour < 15) {
-      return {
-        title: 'توب كافيه • أفضل الأغاني العربية',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
-    if (hour >= 15 && hour < 17) {
-      if (day === 'Wed') {
-        return {
-          title: 'برنامج: لدي أقوال أخرى 🎙️',
-          artist: 'إبراهيم عيسى • نجوم إف إم'
-        };
-      }
-      return {
-        title: 'برنامج: معاك في السكة 🚗',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
-    if (hour >= 17 && hour < 19) {
-      return {
+        host: 'يوسف التهامي وفانا إمام',
+        art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        desc: 'بداية يومك بطاقة ونشاط وأهم الأخبار والأغاني'
+      },
+      {
+        start: '10:00',
+        end: '12:00',
+        startH: 10,
+        endH: 12,
+        title: 'ساعة مع نجم وأحلى الأغاني 🎵',
+        host: 'نجوم إف إم 100.6',
+        art: '/amr_diab.jpg',
+        desc: 'أجمل أغاني ومحطات كبار النجوم'
+      },
+      {
+        start: '12:00',
+        end: '15:00',
+        startH: 12,
+        endH: 15,
+        title: 'توب كافيه • أفضل الأغاني العربية ☕',
+        host: 'نجوم إف إم 100.6',
+        art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        desc: 'موسيقى وأغاني مميزة ترافقك وقت الظهيرة'
+      },
+      {
+        start: '15:00',
+        end: '17:00',
+        startH: 15,
+        endH: 17,
+        title: day === 'Wed' ? 'برنامج: لدي أقوال أخرى 🎙️' : 'برنامج: معاك في السكة 🚗',
+        host: day === 'Wed' ? 'إبراهيم عيسى' : 'نجوم إف إم',
+        art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        desc: 'حوارات فكرية وفنية وتغطيات متنوعة'
+      },
+      {
+        start: '17:00',
+        end: '19:00',
+        startH: 17,
+        endH: 19,
         title: 'برنامج: كلام في الزحمة 🚦',
-        artist: 'مروان قدري ويارا الجندي'
-      };
-    }
-    if (hour >= 19 && hour < 20) {
-      return {
+        host: 'مروان قدري ويارا الجندي',
+        art: 'https://images.weserv.nl/?url=www.nogoumfm.net/wp-content/uploads/2018/09/Kalam-Fel-Zahma.jpg&w=512&h=512&fit=cover',
+        desc: 'متابعة حالة المرور وأخبار السوشيال ميديا وأحلى أغاني الطريق'
+      },
+      {
+        start: '19:00',
+        end: '20:00',
+        startH: 19,
+        endH: 20,
         title: 'برنامج: أجمد 7 الساعة 7 ⭐',
-        artist: 'جيهان عبد الله'
-      };
-    }
-    if (hour >= 20 && hour < 22) {
-      if (day === 'Wed') {
-        return {
-          title: 'برنامج: تِربو Turbo 🏎️',
-          artist: 'تامر بشير'
-        };
+        host: 'جيهان عبد الله',
+        art: 'https://images.weserv.nl/?url=www.nogoumfm.net/wp-content/uploads/2015/09/Gehan-Abdallah.jpg&w=512&h=512&fit=cover',
+        desc: 'سباق الأغاني العربية الأسبوعي والأكثر استماعاً'
+      },
+      {
+        start: '20:00',
+        end: '22:00',
+        startH: 20,
+        endH: 22,
+        title: day === 'Wed' ? 'برنامج: تِربو Turbo 🏎️' : (day === 'Sun' ? 'برنامج: في الاستاد ⚽' : 'برنامج: نجوم الكاسيت 📼'),
+        host: day === 'Wed' ? 'تامر بشير' : (day === 'Sun' ? 'كريم خطاب' : 'نجوم إف إم'),
+        art: day === 'Wed'
+          ? 'https://images.weserv.nl/?url=www.nogoumfm.net/wp-content/uploads/2015/09/Tamer-Bashir.jpg&w=512&h=512&fit=cover'
+          : 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        desc: 'برامج متخصصة في السيارات، الرياضة، وموسيقى الكاسيت'
+      },
+      {
+        start: '22:00',
+        end: '00:00',
+        startH: 22,
+        endH: 24,
+        title: day === 'Thu' ? 'برنامج: أسرار النجوم ✨' : 'سهرة الطرب وأحلى الأغاني 🌙',
+        host: day === 'Thu' ? 'إنجي علي' : 'نجوم إف إم 100.6',
+        art: '/om_kulthum.jpg',
+        desc: 'حوارات خاصة مع ألمع نجوم الفن والسينما'
       }
-      if (day === 'Sun') {
-        return {
-          title: 'برنامج: في الاستاد ⚽',
-          artist: 'كريم خطاب'
-        };
-      }
-      return {
-        title: 'برنامج: نجوم الكاسيت 📼',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
-    if (hour >= 22 || hour < 24) {
-      if (day === 'Thu') {
-        return {
-          title: 'برنامج: أسرار النجوم ✨',
-          artist: 'إنجي علي'
-        };
-      }
-      return {
-        title: 'سهرة الطرب وأحلى الأغاني',
-        artist: 'نجوم إف إم 100.6'
-      };
-    }
+    ];
+
+    return shows.map(item => ({
+      ...item,
+      isCurrent: currentHour >= item.startH && currentHour < item.endH
+    }));
   }
 
-  // 2. Nile FM (104.2 FM)
+  // Nile FM
   if (stationId === 'nile-fm') {
-    if (hour >= 7 && hour < 10) {
-      return { title: 'The Big Drive ☀️', artist: 'Mark & Sally • Nile FM' };
-    }
-    if (hour >= 10 && hour < 13) {
-      return { title: 'Nile FM Hit Music 🎵', artist: '104.2 FM' };
-    }
-    if (hour >= 13 && hour < 16) {
-      return { title: 'The Afternoon Show 🎧', artist: 'Nile FM 104.2' };
-    }
-    if (hour >= 16 && hour < 19) {
-      return { title: 'Drive Time Hits 🚗', artist: 'Nile FM 104.2' };
-    }
-    if (hour >= 19 && hour < 22) {
-      return { title: 'Nile FM Top 20 ⭐', artist: '104.2 FM' };
-    }
-    return { title: 'Non-Stop Hit Music 🎶', artist: 'Nile FM 104.2' };
+    return [
+      { start: '07:00', end: '10:00', startH: 7, endH: 10, title: 'The Big Drive ☀️', host: 'Mark & Sally', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png', desc: 'Wake up with hit music, laughs, and Cairo morning updates' },
+      { start: '10:00', end: '13:00', startH: 10, endH: 13, title: 'Nile FM Hit Music 🎵', host: 'Nile FM 104.2', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png', desc: 'Non-stop top international hits' },
+      { start: '13:00', end: '16:00', startH: 13, endH: 16, title: 'The Afternoon Show 🎧', host: 'Nile FM 104.2', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png', desc: 'Top chart music and entertainment' },
+      { start: '16:00', end: '19:00', startH: 16, endH: 19, title: 'Drive Time Hits 🚗', host: 'Nile FM 104.2', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png', desc: 'Beating the traffic with the hottest tracks' },
+      { start: '19:00', end: '22:00', startH: 19, endH: 22, title: 'Nile FM Top 20 ⭐', host: 'Nile FM 104.2', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png', desc: 'The countdown of the week’s biggest hits' },
+      { start: '22:00', end: '07:00', startH: 22, endH: 31, title: 'Non-Stop Hit Music 🎶', host: 'Nile FM 104.2', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png', desc: 'Late night international playlist' }
+    ].map(item => ({
+      ...item,
+      isCurrent: item.endH > 24 
+        ? (currentHour >= item.startH || currentHour < item.endH - 24)
+        : (currentHour >= item.startH && currentHour < item.endH)
+    }));
   }
 
-  // 3. Mega FM (92.7 FM)
-  if (stationId === 'mega-fm-92-7') {
-    if (hour >= 8 && hour < 11) {
-      return { title: 'صباح الخير يا مصر ☀️', artist: 'ميجا أف أم 92.7' };
-    }
-    if (hour >= 11 && hour < 15) {
-      return { title: 'أحلى الأغاني المنوعة 🎶', artist: 'ميجا أف أم 92.7' };
-    }
-    if (hour >= 15 && hour < 18) {
-      return { title: 'ميجا درايف في الزحمة 🚗', artist: 'ميجا أف أم 92.7' };
-    }
-    if (hour >= 18 && hour < 22) {
-      return { title: 'ميجا ميكس وأقوى الأغاني ⭐', artist: 'ميجا أف أم 92.7' };
-    }
-    return { title: 'سهرة ميجا وأجمل الأغاني 🌙', artist: 'ميجا أف أم 92.7' };
-  }
+  // Generic stations default
+  return [
+    { start: '00:00', end: '24:00', startH: 0, endH: 24, title: 'بث مباشر متواصل 24/7', host: 'البث الحي', art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png', desc: 'استماع مباشر على مدار الساعة', isCurrent: true }
+  ];
+}
 
-  // 4. Shaabi FM (95.0 FM)
-  if (stationId === 'shaabi-95') {
+// Current Show Resolver
+export function getStationScheduleNow(stationId) {
+  const schedule = getStationDailySchedule(stationId);
+  const current = schedule.find(s => s.isCurrent);
+  if (current) {
     return {
-      title: 'أجمل الأغاني الشعبية والموال الأصيل 🪕',
-      artist: 'شعبي أف أم 95.0'
+      title: current.title,
+      artist: current.host ? `${current.host} • ${current.start} - ${current.end}` : current.start,
+      art: current.art,
+      showObj: current
     };
   }
-
-  // 5. Nagham FM (105.3 FM)
-  if (stationId === 'nagham-fm') {
-    return {
-      title: 'نغم مصر الأصيل وأحلى الأغاني 🎵',
-      artist: 'نغم أف أم 105.3'
-    };
-  }
-
-  // 6. Radio Hits (88.2 FM)
-  if (stationId === 'hits') {
-    return {
-      title: 'أحدث الهيتس والأغاني الشبابية ⚡',
-      artist: 'راديو هيتس 88.2'
-    };
-  }
-
-  // 7. 90s FM (التسعينات)
-  if (stationId === 'arabic-90s-fm') {
-    return {
-      title: 'ذكريات وروائع التسعينات والثمانينات 📼',
-      artist: 'راديو التسعينات 90s FM'
-    };
-  }
-
-  // 8. Quran Radio (إذاعة القرآن الكريم)
-  if (stationId === 'quran-cairo' || stationId.includes('quran')) {
-    return {
-      title: 'تلاوات مباركة وبرامج إذاعة القرآن الكريم 📖',
-      artist: 'إذاعة القرآن الكريم من القاهرة'
-    };
-  }
-
   return null;
 }

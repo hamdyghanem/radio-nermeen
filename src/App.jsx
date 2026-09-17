@@ -7,11 +7,13 @@ import FavoritesShelf from './components/FavoritesShelf';
 import StationGrid from './components/StationGrid';
 import PlayerBar from './components/PlayerBar';
 import SleepTimerModal from './components/SleepTimerModal';
+import ScheduleModal from './components/ScheduleModal';
 import OfflineNotice from './components/OfflineNotice';
 import { STATIONS } from './data/stations';
 
 export default function App() {
   const [isTimerOpen, setIsTimerOpen] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('hn_theme') || 'dark');
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export default function App() {
       <div className="app-container">
         <Header 
           onOpenTimer={() => setIsTimerOpen(true)} 
+          onOpenSchedule={() => setIsScheduleOpen(true)}
           theme={theme} 
           onToggleTheme={toggleTheme} 
         />
@@ -52,11 +55,16 @@ export default function App() {
           </footer>
         </main>
 
-        <PlayerBar />
+        <PlayerBar onOpenSchedule={() => setIsScheduleOpen(true)} />
 
         <SleepTimerModal 
           isOpen={isTimerOpen} 
           onClose={() => setIsTimerOpen(false)} 
+        />
+
+        <ScheduleModal 
+          isOpen={isScheduleOpen} 
+          onClose={() => setIsScheduleOpen(false)} 
         />
       </div>
     </RadioProvider>

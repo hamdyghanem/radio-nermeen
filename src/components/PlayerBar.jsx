@@ -3,7 +3,7 @@ import { Play, Pause, Heart } from 'lucide-react';
 import { useRadio } from '../context/RadioContext';
 import { STATIONS } from '../data/stations';
 
-export default function PlayerBar() {
+export default function PlayerBar({ onOpenSchedule }) {
   const { currentStation, nowPlaying, isPlaying, isLoading, playStation, pauseAudio, resumeAudio, favorites, toggleFavorite } = useRadio();
 
   const station = currentStation || STATIONS[0];
@@ -43,12 +43,12 @@ export default function PlayerBar() {
       </div>
 
       <div className="player-inner">
-        <div className="player-thumb">
-          <img src={displayLogo} alt={station.name} />
+        <div className="player-thumb" onClick={onOpenSchedule} title="عرض جدول البرامج" style={{ cursor: 'pointer' }}>
+          <img src={displayLogo} alt={station.name} onError={(e) => { e.target.src = station.logo; }} />
           {isPlaying && <span className="live-dot"></span>}
         </div>
 
-        <div className="player-info">
+        <div className="player-info" onClick={onOpenSchedule} title="عرض جدول البرامج" style={{ cursor: 'pointer' }}>
           <h4>{displayTitle}</h4>
           <p>{displaySubtitle}</p>
         </div>

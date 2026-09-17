@@ -1,9 +1,9 @@
 import React from 'react';
-import { Radio, Moon, Sun, Heart } from 'lucide-react';
+import { Radio, Moon, Sun, Heart, Calendar } from 'lucide-react';
 import { useRadio } from '../context/RadioContext';
 
-export default function Header({ onOpenTimer, theme, onToggleTheme }) {
-  const { timerRemaining } = useRadio();
+export default function Header({ onOpenTimer, onOpenSchedule, theme, onToggleTheme }) {
+  const { timerRemaining, currentStation } = useRadio();
   const timerMins = Math.ceil(timerRemaining / 60);
 
   return (
@@ -22,8 +22,18 @@ export default function Header({ onOpenTimer, theme, onToggleTheme }) {
       <div className="header-actions">
         <button 
           className="icon-btn" 
+          onClick={onOpenSchedule} 
+          title="جدول البرامج اليومي"
+          aria-label="جدول البرامج"
+        >
+          <Calendar size={20} />
+        </button>
+
+        <button 
+          className="icon-btn" 
           onClick={onOpenTimer} 
           title="مؤقت النوم"
+          aria-label="مؤقت النوم"
         >
           <Moon size={20} />
           {timerRemaining > 0 && (
@@ -35,6 +45,7 @@ export default function Header({ onOpenTimer, theme, onToggleTheme }) {
           className="icon-btn" 
           onClick={onToggleTheme} 
           title="تغيير المظهر"
+          aria-label="تغيير المظهر"
         >
           {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
         </button>

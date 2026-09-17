@@ -816,3 +816,192 @@ input { -webkit-text-size-adjust: 100%; }
 /* Smooth momentum scrolling */
 .horizontal-scroll { -webkit-overflow-scrolling: touch; }
 
+/* =============================================
+   Schedule Modal Styles
+   ============================================= */
+.schedule-modal {
+  max-width: 520px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.schedule-header-title h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.schedule-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.cairo-clock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cairo-clock strong {
+  color: var(--text-primary);
+}
+
+.station-tag {
+  background: rgba(255, 78, 136, 0.15);
+  color: var(--accent-rose);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+.shows-list {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+  margin-bottom: 14px;
+  max-height: 52vh;
+}
+
+.show-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s ease;
+}
+
+.show-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.show-card.is-on-air {
+  background: linear-gradient(135deg, rgba(255, 78, 136, 0.14), rgba(77, 171, 247, 0.08));
+  border-color: rgba(255, 78, 136, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 78, 136, 0.15);
+}
+
+.show-art-wrap {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #1a1a2e;
+}
+
+.show-art-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.on-air-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #e50914;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.pulse-circle {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulseDot 1.2s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.show-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.show-time {
+  font-size: 0.75rem;
+  color: var(--accent-rose);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.show-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.show-host {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.show-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted, #7e8b9b);
+  margin: 3px 0 0;
+  line-height: 1.3;
+}
+
+.tune-in-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--accent-rose);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(255, 78, 136, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.tune-in-btn:hover {
+  transform: scale(1.1);
+}
+
+
