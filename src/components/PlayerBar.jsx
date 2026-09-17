@@ -4,10 +4,20 @@ import { useRadio } from '../context/RadioContext';
 import { STATIONS } from '../data/stations';
 
 export default function PlayerBar() {
-  const { currentStation, isPlaying, isLoading, playStation, pauseAudio, resumeAudio, favorites, toggleFavorite } = useRadio();
+  const { currentStation, nowPlaying, isPlaying, isLoading, playStation, pauseAudio, resumeAudio, favorites, toggleFavorite } = useRadio();
 
   const station = currentStation || STATIONS[0];
   const isFav = favorites.includes(station.id);
+
+  const displayTitle = currentStation
+    ? (nowPlaying?.title && nowPlaying.title !== 'Live Broadcast' ? nowPlaying.title : station.name)
+    : 'اختر إذاعة للتشغيل';
+
+  const displaySubtitle = currentStation
+    ? (nowPlaying?.artist ? `${nowPlaying.artist} • ${station.name}` : `${station.freq} • بث مباشر`)
+    : (station.freq + ' • بث مباشر');
+
+  const displayLogo = (nowPlaying?.art && isPlaying) ? nowPlaying.art : station.logo;
 
   const handleTogglePlay = () => {
     if (!currentStation) {
@@ -34,13 +44,13 @@ export default function PlayerBar() {
 
       <div className="player-inner">
         <div className="player-thumb">
-          <img src={station.logo} alt={station.name} />
+          <img src={displayLogo} alt={station.name} />
           {isPlaying && <span className="live-dot"></span>}
         </div>
 
         <div className="player-info">
-          <h4>{currentStation ? station.name : 'اختر إذاعة للتشغيل'}</h4>
-          <p>{station.freq} • بث مباشر</p>
+          <h4>{displayTitle}</h4>
+          <p>{displaySubtitle}</p>
         </div>
 
         <div className="player-controls">

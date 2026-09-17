@@ -6,7 +6,8 @@ export const STATIONS = [
     desc: "إذاعة النجوم الأولى والأقوى في مصر والوطن العربي",
     freq: "100.6 FM",
     logo: "https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png",
-    stream: "https://audio.nrpstream.com/listen/nogoumfm/radio.mp3"
+    stream: "https://audio.nrpstream.com/listen/nogoumfm/radio.mp3",
+    apiUrl: "https://audio.nrpstream.com/api/nowplaying/nogoumfm"
   },
   {
     id: "mega-fm-92-7",
@@ -46,7 +47,8 @@ export const STATIONS = [
     desc: "Egypt's #1 For Hit Music",
     freq: "104.2 FM",
     logo: "https://cdn.instant.audio/images/logos/egyptradio-net/nile-fm.png",
-    stream: "https://audio.nrpstream.com/listen/nile_fm/radio.mp3"
+    stream: "https://audio.nrpstream.com/listen/nile_fm/radio.mp3",
+    apiUrl: "https://audio.nrpstream.com/api/nowplaying/nile_fm"
   },
   {
     id: "arabic-90s-fm",

@@ -18,6 +18,9 @@ export function RadioProvider({ children }) {
     return JSON.parse(localStorage.getItem('nermeen_radio_recents') || '[]');
   });
 
+  // Live Track / Show Now Playing info
+  const [nowPlaying, setNowPlaying] = useState({ title: '', artist: '', art: '' });
+
   // Sleep Timer
   const [timerRemaining, setTimerRemaining] = useState(0);
   const timerRef = useRef(null);
@@ -27,6 +30,7 @@ export function RadioProvider({ children }) {
 
   // Store current station in a ref so callbacks access it without stale closures
   const currentStationRef = useRef(null);
+  const nowPlayingRef = useRef({ title: '', artist: '', art: '' });
 
   // Online / Offline state
   const [isOnline, setIsOnline] = useState(() =>
@@ -78,19 +82,22 @@ export function RadioProvider({ children }) {
     return (typeof window !== 'undefined' ? window.location.origin : '') + logoUrl;
   };
 
-  // MediaSession setup - call after user gesture for iOS to register lockscreen controls
-  const updateMediaSession = useCallback((station, playing) => {
-    if (!('mediaSession' in navigator)) return;
+  // MediaSession setup - updates iOS / Browser Lock Screen & CarPlay
+  const updateMediaSession = useCallback((station, playing, liveMeta = null) => {
+    if (!('mediaSession' in navigator) || !station) return;
 
-    const absoluteLogo = getAbsoluteLogo(station.logo);
+    const meta = liveMeta || nowPlayingRef.current;
+    const title = meta.title && meta.title !== 'Live Broadcast' ? meta.title : station.name;
+    const artist = meta.artist ? `${meta.artist} • ${station.freq}` : `${station.freq} • بث مباشر`;
+    const artworkSrc = meta.art || getAbsoluteLogo(station.logo);
 
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: station.name,
-      artist: `${station.freq} • بث مباشر`,
-      album: 'راديو نرمين 🌸',
+      title: title,
+      artist: artist,
+      album: station.name || 'راديو نرمين 🌸',
       artwork: [
-        { src: absoluteLogo, sizes: '512x512', type: 'image/png' },
-        { src: absoluteLogo, sizes: '192x192', type: 'image/png' },
+        { src: artworkSrc, sizes: '512x512', type: 'image/png' },
+        { src: artworkSrc, sizes: '192x192', type: 'image/png' },
       ],
     });
 
@@ -281,6 +288,57 @@ export function RadioProvider({ children }) {
     };
   }, [isOnline, triggerDisconnectBeep, startLiveStream]);
 
+  // Live metadata polling for stations with apiUrl (Nogoum FM, Nile FM, etc.)
+  useEffect(() => {
+    let metaInterval = null;
+
+    const fetchStationMeta = async () => {
+      const station = currentStationRef.current;
+      if (!station || !station.apiUrl) {
+        setNowPlaying({ title: '', artist: '', art: '' });
+        nowPlayingRef.current = { title: '', artist: '', art: '' };
+        return;
+      }
+
+      try {
+        const res = await fetch(station.apiUrl);
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const rawTitle = data.now_playing?.song?.title || '';
+        const rawArtist = data.now_playing?.song?.artist || data.live?.streamer_name || '';
+        const rawArt = data.now_playing?.song?.art || '';
+
+        const newMeta = {
+          title: rawTitle && rawTitle !== 'Live Broadcast' ? rawTitle : station.name,
+          artist: rawArtist,
+          art: rawArt.startsWith('http') ? rawArt : ''
+        };
+
+        setNowPlaying(newMeta);
+        nowPlayingRef.current = newMeta;
+
+        if (isPlaying && currentStationRef.current) {
+          updateMediaSession(currentStationRef.current, true, newMeta);
+        }
+      } catch (err) {
+        console.warn('Metadata fetch error:', err);
+      }
+    };
+
+    if (currentStation?.apiUrl) {
+      fetchStationMeta();
+      metaInterval = setInterval(fetchStationMeta, 12000);
+    } else {
+      setNowPlaying({ title: '', artist: '', art: '' });
+      nowPlayingRef.current = { title: '', artist: '', art: '' };
+    }
+
+    return () => {
+      if (metaInterval) clearInterval(metaInterval);
+    };
+  }, [currentStation, isPlaying, updateMediaSession]);
+
   // Persist state
   useEffect(() => {
     localStorage.setItem('nermeen_radio_favs', JSON.stringify(favorites));
@@ -373,6 +431,7 @@ export function RadioProvider({ children }) {
   return (
     <RadioContext.Provider value={{
       currentStation,
+      nowPlaying,
       isPlaying,
       isLoading,
       isOnline,
