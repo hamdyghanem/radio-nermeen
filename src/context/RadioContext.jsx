@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { STATIONS } from '../data/stations';
+import { getStationScheduleNow } from '../data/schedule';
 
 const RadioContext = createContext();
 
@@ -76,20 +77,36 @@ export function RadioProvider({ children }) {
   }, []);
 
   // Helper to ensure logo URL is absolute (critical for iOS Lockscreen MediaMetadata)
-  const getAbsoluteLogo = (logoUrl) => {
+  const getAbsoluteLogo = useCallback((logoUrl) => {
     if (!logoUrl) return (typeof window !== 'undefined' ? window.location.origin : '') + '/apple-touch-icon.png';
     if (logoUrl.startsWith('http://') || logoUrl.startsWith('https://')) return logoUrl;
     return (typeof window !== 'undefined' ? window.location.origin : '') + logoUrl;
-  };
+  }, []);
+
+  // Forward ref functions for Next/Prev stations
+  const playNextStationRef = useRef(null);
+  const playPrevStationRef = useRef(null);
+  const startLiveStreamRef = useRef(null);
 
   // MediaSession setup - updates iOS / Browser Lock Screen & CarPlay
   const updateMediaSession = useCallback((station, playing, liveMeta = null) => {
     if (!('mediaSession' in navigator) || !station) return;
 
     const meta = liveMeta || nowPlayingRef.current;
-    const title = meta.title && meta.title !== 'Live Broadcast' ? meta.title : station.name;
-    const artist = meta.artist ? `${meta.artist} • ${station.freq}` : `${station.freq} • بث مباشر`;
-    const artworkSrc = meta.art || getAbsoluteLogo(station.logo);
+    const schedule = getStationScheduleNow(station.id);
+
+    let title = station.name;
+    let artist = `${station.freq} • بث مباشر`;
+    let artworkSrc = getAbsoluteLogo(station.logo);
+
+    if (meta.title && meta.title !== 'Live Broadcast' && meta.title !== station.name) {
+      title = meta.title;
+      artist = meta.artist ? `${meta.artist} • ${station.name}` : `${station.freq} • بث مباشر`;
+      if (meta.art) artworkSrc = meta.art;
+    } else if (schedule) {
+      title = schedule.title;
+      artist = schedule.artist;
+    }
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title: title,
@@ -101,9 +118,43 @@ export function RadioProvider({ children }) {
       ],
     });
 
-    // Update playback state so lock screen shows correct icon
     navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
-  }, []);
+
+    // Register Next/Previous Track to replace the 10s skip buttons in iOS Lock Screen & CarPlay
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (startLiveStreamRef.current && currentStationRef.current) {
+        startLiveStreamRef.current(currentStationRef.current);
+      }
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'paused';
+        }
+      }
+    });
+
+    navigator.mediaSession.setActionHandler('stop', () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'paused';
+        }
+      }
+    });
+
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      if (playNextStationRef.current) playNextStationRef.current();
+    });
+
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      if (playPrevStationRef.current) playPrevStationRef.current();
+    });
+  }, [getAbsoluteLogo]);
 
   // Central method to start / reconnect live stream cleanly (handles iOS background resume)
   const startLiveStream = useCallback((station) => {
@@ -221,39 +272,12 @@ export function RadioProvider({ children }) {
     startLiveStream(prevStation);
   }, [startLiveStream]);
 
-  // MediaSession action handlers (registered for iOS lockscreen / headphones)
+  // Keep refs in sync so MediaSession always invokes latest callbacks
   useEffect(() => {
-    if (!('mediaSession' in navigator)) return;
-
-    // Resuming from lockscreen: re-attach live stream head fresh!
-    const handleResume = () => {
-      if (currentStationRef.current) {
-        startLiveStream(currentStationRef.current);
-      }
-    };
-
-    const handlePause = () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.playbackState = 'paused';
-        }
-      }
-    };
-
-    navigator.mediaSession.setActionHandler('play', handleResume);
-    navigator.mediaSession.setActionHandler('pause', handlePause);
-    navigator.mediaSession.setActionHandler('stop', handlePause);
-    navigator.mediaSession.setActionHandler('nexttrack', playNextStation);
-    navigator.mediaSession.setActionHandler('previoustrack', playPrevStation);
-
-    try {
-      navigator.mediaSession.setActionHandler('seekto', null);
-      navigator.mediaSession.setActionHandler('seekbackward', null);
-      navigator.mediaSession.setActionHandler('seekforward', null);
-    } catch (_) {}
-  }, [startLiveStream, playNextStation, playPrevStation]);
+    playNextStationRef.current = playNextStation;
+    playPrevStationRef.current = playPrevStation;
+    startLiveStreamRef.current = startLiveStream;
+  }, [playNextStation, playPrevStation, startLiveStream]);
 
   // Network monitor
   useEffect(() => {
@@ -288,47 +312,58 @@ export function RadioProvider({ children }) {
     };
   }, [isOnline, triggerDisconnectBeep, startLiveStream]);
 
-  // Live metadata polling for stations with apiUrl (Nogoum FM, Nile FM, etc.)
+  // Live metadata polling for current station (API song info or Cairo schedule)
   useEffect(() => {
     let metaInterval = null;
 
     const fetchStationMeta = async () => {
       const station = currentStationRef.current;
-      if (!station || !station.apiUrl) {
+      if (!station) {
         setNowPlaying({ title: '', artist: '', art: '' });
         nowPlayingRef.current = { title: '', artist: '', art: '' };
         return;
       }
 
-      try {
-        const res = await fetch(station.apiUrl);
-        if (!res.ok) return;
-        const data = await res.json();
+      const schedule = getStationScheduleNow(station.id);
+      let resolvedMeta = {
+        title: schedule ? schedule.title : station.name,
+        artist: schedule ? schedule.artist : `${station.freq} • بث مباشر`,
+        art: ''
+      };
 
-        const rawTitle = data.now_playing?.song?.title || '';
-        const rawArtist = data.now_playing?.song?.artist || data.live?.streamer_name || '';
-        const rawArt = data.now_playing?.song?.art || '';
+      if (station.apiUrl) {
+        try {
+          const res = await fetch(station.apiUrl);
+          if (res.ok) {
+            const data = await res.json();
+            const rawTitle = data.now_playing?.song?.title || '';
+            const rawArtist = data.now_playing?.song?.artist || data.live?.streamer_name || '';
+            const rawArt = data.now_playing?.song?.art || '';
 
-        const newMeta = {
-          title: rawTitle && rawTitle !== 'Live Broadcast' ? rawTitle : station.name,
-          artist: rawArtist,
-          art: rawArt.startsWith('http') ? rawArt : ''
-        };
-
-        setNowPlaying(newMeta);
-        nowPlayingRef.current = newMeta;
-
-        if (isPlaying && currentStationRef.current) {
-          updateMediaSession(currentStationRef.current, true, newMeta);
+            if (rawTitle && rawTitle !== 'Live Broadcast') {
+              resolvedMeta = {
+                title: rawTitle,
+                artist: rawArtist || station.name,
+                art: rawArt.startsWith('http') ? rawArt : ''
+              };
+            }
+          }
+        } catch (err) {
+          console.warn('Metadata fetch error:', err);
         }
-      } catch (err) {
-        console.warn('Metadata fetch error:', err);
+      }
+
+      setNowPlaying(resolvedMeta);
+      nowPlayingRef.current = resolvedMeta;
+
+      if (isPlaying && currentStationRef.current) {
+        updateMediaSession(currentStationRef.current, true, resolvedMeta);
       }
     };
 
-    if (currentStation?.apiUrl) {
+    if (currentStation) {
       fetchStationMeta();
-      metaInterval = setInterval(fetchStationMeta, 12000);
+      metaInterval = setInterval(fetchStationMeta, 10000);
     } else {
       setNowPlaying({ title: '', artist: '', art: '' });
       nowPlayingRef.current = { title: '', artist: '', art: '' };
