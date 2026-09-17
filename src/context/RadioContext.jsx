@@ -96,22 +96,27 @@ export function RadioProvider({ children }) {
     const schedule = getStationScheduleNow(station.id);
 
     let title = station.name;
-    let artist = `${station.freq} • بث مباشر`;
+    let artist = 'راديو نرمين 🌸';
     let artworkSrc = getAbsoluteLogo(station.logo);
 
     if (meta.title && meta.title !== 'Live Broadcast' && meta.title !== station.name) {
       title = meta.title;
-      artist = meta.artist ? `${meta.artist} • ${station.name}` : `${station.freq} • بث مباشر`;
+      artist = meta.artist
+        ? `${meta.artist} — ${station.name}`
+        : station.name;
       if (meta.art) artworkSrc = meta.art;
     } else if (schedule) {
       title = schedule.title;
-      artist = schedule.artist;
+      artist = schedule.artist || station.name;
+    } else {
+      title = station.name;
+      artist = station.freq ? `${station.freq} • بث مباشر` : 'بث مباشر';
     }
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title: title,
       artist: artist,
-      album: station.name || 'راديو نرمين 🌸',
+      album: 'راديو نرمين 🌸',   // always the app name — shows on CarPlay header
       artwork: [
         { src: artworkSrc, sizes: '512x512', type: 'image/png' },
         { src: artworkSrc, sizes: '192x192', type: 'image/png' },

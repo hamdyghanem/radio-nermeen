@@ -25,7 +25,7 @@ export default function StationCard({ station }) {
           title={isFav ? 'إزالة من المفضلة 💔' : 'إضافة للمفضلة ❤️'}
           aria-label="المفضلة"
         >
-          <Heart size={16} fill={isFav ? '#ff4e88' : 'none'} color={isFav ? '#ff4e88' : '#9aa3c0'} />
+          <Heart size={16} fill={isFav ? '#ff4e88' : 'none'} color={isFav ? '#ff4e88' : 'currentColor'} />
         </button>
       </div>
 
