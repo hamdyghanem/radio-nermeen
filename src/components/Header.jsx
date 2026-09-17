@@ -1,10 +1,18 @@
-import React from 'react';
-import { Radio, Moon, Sun, Heart, Calendar } from 'lucide-react';
+import React, { useState } from 'react';
+import { Radio, Moon, Sun, Heart, Calendar, RotateCw } from 'lucide-react';
 import { useRadio } from '../context/RadioContext';
 
 export default function Header({ onOpenTimer, onOpenSchedule, theme, onToggleTheme }) {
-  const { timerRemaining, currentStation } = useRadio();
+  const { timerRemaining } = useRadio();
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const timerMins = Math.ceil(timerRemaining / 60);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      window.location.reload();
+    }, 250);
+  };
 
   return (
     <header className="top-header">
@@ -27,6 +35,15 @@ export default function Header({ onOpenTimer, onOpenSchedule, theme, onToggleThe
           aria-label="جدول البرامج"
         >
           <Calendar size={20} />
+        </button>
+
+        <button 
+          className={`icon-btn ${isRefreshing ? 'is-spinning' : ''}`}
+          onClick={handleRefresh} 
+          title="تحديث الصفحة"
+          aria-label="تحديث الصفحة"
+        >
+          <RotateCw size={19} />
         </button>
 
         <button 
