@@ -828,6 +828,30 @@ input { -webkit-text-size-adjust: 100%; }
   max-height: 85vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(155deg, rgba(28, 32, 54, 0.96) 0%, rgba(15, 17, 30, 0.98) 100%) !important;
+  border: 1.5px solid rgba(255, 78, 136, 0.45) !important;
+  border-radius: 24px !important;
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(255, 78, 136, 0.25),
+    0 0 10px rgba(77, 171, 247, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff4e88, #4dabf7, transparent);
+  border-radius: 2px;
+  opacity: 0.9;
 }
 
 .schedule-header-title {

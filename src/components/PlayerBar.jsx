@@ -17,7 +17,7 @@ export default function PlayerBar({ onOpenSchedule }) {
     ? (nowPlaying?.artist ? `${nowPlaying.artist} • ${station.name}` : `${station.freq} • بث مباشر`)
     : (station.freq + ' • بث مباشر');
 
-  const displayLogo = (nowPlaying?.art && isPlaying) ? nowPlaying.art : station.logo;
+  const displayLogo = station.logo;
 
   const handleTogglePlay = () => {
     if (!currentStation) {

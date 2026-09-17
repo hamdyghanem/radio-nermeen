@@ -37,6 +37,8 @@ export function getStationDailySchedule(stationId) {
   const isWeekend = day === 'Fri' || day === 'Sat';
 
   if (stationId === 'nogoum-fm') {
+    const defaultNogoumLogo = 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png';
+
     if (isWeekend) {
       return [
         {
@@ -46,7 +48,7 @@ export function getStationDailySchedule(stationId) {
           endH: 8,
           title: 'نجوم زمان وأحلى أغاني الليل',
           host: 'نجوم إف إم',
-          art: '/abdel_halim.jpg',
+          art: defaultNogoumLogo,
           desc: 'روائع الأغاني الكلاسيكية والطرب الأصيل'
         },
         {
@@ -56,7 +58,7 @@ export function getStationDailySchedule(stationId) {
           endH: 14,
           title: 'صباح الويك إند وجمعة مباركة',
           host: 'نجوم إف إم',
-          art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+          art: defaultNogoumLogo,
           desc: 'أغاني الصباح المبهجة وفقرات الويك إند'
         },
         {
@@ -66,7 +68,7 @@ export function getStationDailySchedule(stationId) {
           endH: 18,
           title: 'كوكتيل ويك إند نجوم',
           host: 'أجمل الأغاني المنوعة',
-          art: '/amr_diab.jpg',
+          art: defaultNogoumLogo,
           desc: 'أحدث الأغاني العربية والمصرية المعاصرة'
         },
         {
@@ -76,7 +78,7 @@ export function getStationDailySchedule(stationId) {
           endH: 20,
           title: 'أجمد أغاني الأسبوع',
           host: 'نجوم إف إم 100.6',
-          art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+          art: defaultNogoumLogo,
           desc: 'سباق وتوب أغاني الأسبوع'
         },
         {
@@ -86,7 +88,7 @@ export function getStationDailySchedule(stationId) {
           endH: 26, // past midnight
           title: 'سهرة الويك إند وأحلى الأغاني',
           host: 'نجوم إف إم 100.6',
-          art: '/om_kulthum.jpg',
+          art: defaultNogoumLogo,
           desc: 'سهرة غنائية مميزة حتى الفجر'
         }
       ].map(item => ({
@@ -108,7 +110,7 @@ export function getStationDailySchedule(stationId) {
         host: (day === 'Sun' || day === 'Tue') ? 'أسامة منير' : 'نجوم إف إم',
         art: (day === 'Sun' || day === 'Tue') 
           ? 'https://images.weserv.nl/?url=www.nogoumfm.net/wp-content/uploads/2015/09/Osama-Mounir.jpg&w=512&h=512&fit=cover'
-          : '/om_kulthum.jpg',
+          : defaultNogoumLogo,
         desc: 'أشهر البرامج العاطفية والاجتماعية في العالم العربي'
       },
       {
@@ -118,7 +120,7 @@ export function getStationDailySchedule(stationId) {
         endH: 8,
         title: 'نجوم زمان وأحلى الأغاني الكلاسيكية 🎶',
         host: 'نجوم إف إم 100.6',
-        art: '/abdel_halim.jpg',
+        art: defaultNogoumLogo,
         desc: 'كلوديات وأغاني الزمن الجميل في هدوء الليل'
       },
       {
@@ -128,7 +130,7 @@ export function getStationDailySchedule(stationId) {
         endH: 10,
         title: 'برنامج: عيش صباحك ☀️',
         host: 'يوسف التهامي وفانا إمام',
-        art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        art: defaultNogoumLogo,
         desc: 'بداية يومك بطاقة ونشاط وأهم الأخبار والأغاني'
       },
       {
@@ -138,7 +140,7 @@ export function getStationDailySchedule(stationId) {
         endH: 12,
         title: 'ساعة مع نجم وأحلى الأغاني 🎵',
         host: 'نجوم إف إم 100.6',
-        art: '/amr_diab.jpg',
+        art: defaultNogoumLogo,
         desc: 'أجمل أغاني ومحطات كبار النجوم'
       },
       {
@@ -148,7 +150,7 @@ export function getStationDailySchedule(stationId) {
         endH: 15,
         title: 'توب كافيه • أفضل الأغاني العربية ☕',
         host: 'نجوم إف إم 100.6',
-        art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        art: defaultNogoumLogo,
         desc: 'موسيقى وأغاني مميزة ترافقك وقت الظهيرة'
       },
       {
@@ -158,7 +160,7 @@ export function getStationDailySchedule(stationId) {
         endH: 17,
         title: day === 'Wed' ? 'برنامج: لدي أقوال أخرى 🎙️' : 'برنامج: معاك في السكة 🚗',
         host: day === 'Wed' ? 'إبراهيم عيسى' : 'نجوم إف إم',
-        art: 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+        art: defaultNogoumLogo,
         desc: 'حوارات فكرية وفنية وتغطيات متنوعة'
       },
       {
@@ -190,7 +192,7 @@ export function getStationDailySchedule(stationId) {
         host: day === 'Wed' ? 'تامر بشير' : (day === 'Sun' ? 'كريم خطاب' : 'نجوم إف إم'),
         art: day === 'Wed'
           ? 'https://images.weserv.nl/?url=www.nogoumfm.net/wp-content/uploads/2015/09/Tamer-Bashir.jpg&w=512&h=512&fit=cover'
-          : 'https://cdn.instant.audio/images/logos/egyptradio-net/nogoum-fm.png',
+          : defaultNogoumLogo,
         desc: 'برامج متخصصة في السيارات، الرياضة، وموسيقى الكاسيت'
       },
       {
@@ -200,7 +202,7 @@ export function getStationDailySchedule(stationId) {
         endH: 24,
         title: day === 'Thu' ? 'برنامج: أسرار النجوم ✨' : 'سهرة الطرب وأحلى الأغاني 🌙',
         host: day === 'Thu' ? 'إنجي علي' : 'نجوم إف إم 100.6',
-        art: '/om_kulthum.jpg',
+        art: defaultNogoumLogo,
         desc: 'حوارات خاصة مع ألمع نجوم الفن والسينما'
       }
     ];
